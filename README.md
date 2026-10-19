@@ -6,7 +6,7 @@ Meal and restaurant ideas for older adults, matched to their taste and checked b
 
 Built for the Qloo Agent Hackathon.
 
-**Status:** Qloo is **not connected yet**. The app currently ranks places with a clearly labelled stand-in, and the yellow banner **"SIMULATED TASTE DATA, NOT QLOO"** shows on every page. The real Qloo client will plug in behind the same interface (see [Qloo](#qloo)). Live demo: to be added after deployment.
+**Status:** Qloo is **not connected yet**. The app currently ranks places with a clearly labelled stand-in, and the yellow banner **"SIMULATED TASTE DATA, NOT QLOO"** shows on every page. The real Qloo client will plug in behind the same interface (see [Qloo](#qloo)). **Live demo: https://safeplate-nu.vercel.app** (hosted on the Vercel free Hobby plan; no login needed).
 
 ## What it does
 
