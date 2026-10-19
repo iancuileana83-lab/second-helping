@@ -7,6 +7,7 @@ import { getActiveRules, screenDishes } from "@/safety";
 import type { Screening } from "@/safety";
 import { getTasteProvider } from "@/taste";
 import type { Place } from "@/taste";
+import { MODEL_ID } from "./model";
 import type { PlaceResult, PlanResult } from "./types";
 
 /**
@@ -20,7 +21,6 @@ import type { PlaceResult, PlanResult } from "./types";
  */
 
 const CUISINES = Object.keys(MENUS) as [string, ...string[]];
-const MODEL_ID = process.env.GEMINI_MODEL || "gemini-3.5-flash-lite";
 const MAX_PLACES = 3;
 const MIN_GOOD_SCORE = 0.3;
 /** Wording that would sound like medical clearance. Rejected in model text. */

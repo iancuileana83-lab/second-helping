@@ -68,7 +68,7 @@ function escapeRe(s: string): string {
 }
 
 /** Whole-term match (optional plural), so "ham" does not match "hamburger". */
-function keywordMatches(keyword: string, haystack: string): boolean {
+export function keywordMatches(keyword: string, haystack: string): boolean {
   const re = new RegExp(`(?<![a-z0-9-])${escapeRe(norm(keyword))}(?:s|es)?(?![a-z0-9-])`);
   return re.test(haystack);
 }

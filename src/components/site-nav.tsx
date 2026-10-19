@@ -32,6 +32,7 @@ export const NAV: Item[] = [
       { href: "/meals/weekly-plan", label: "Weekly plan" },
     ],
   },
+  { href: "/ask", label: "Ask SafePlate", icon: "💬" },
   {
     href: "/safety",
     label: "Safety",

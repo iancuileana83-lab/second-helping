@@ -16,6 +16,8 @@ Build a fictional profile (favourite cuisines and dishes, medicine groups, eatin
 - **Cook at home:** dish ideas by cuisine, best taste match first.
 - **Weekly plan:** a lunch and a dinner for each day, with no repeats and nothing the rules exclude.
 
+- **Ask SafePlate:** ask in plain English ("Margaret wants fish tonight, which restaurant?"). A Gemini agent chooses tools (taste, menu search, the safety rules, the weekly plan) and every step is shown under the answer. It can only choose and explain: it cannot override, soften or invent a safety result, it refuses anything outside meals and food safety, and it never gives dosing advice.
+
 Every dish is checked against written rules and gets one of four results, always with the reason:
 
 | Result | Meaning |

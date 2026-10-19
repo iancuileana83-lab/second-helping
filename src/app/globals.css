@@ -297,3 +297,29 @@ ul.dishes { grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1f
 }
 .dish.hint-wiggle .flip { animation: wiggle 0.9s ease-in-out calc(var(--i) * 0.42s + 1.5s) 1 both; }
 .why-btn { gap: 6px; }
+
+/* ===== Ask SafePlate ===== */
+.chat { margin: 16px 0; }
+.turn { margin: 18px 0; }
+.q-bubble {
+  margin: 0 0 10px auto; max-width: 80%; width: fit-content; background: var(--primary); color: var(--primary-text);
+  padding: 10px 16px; border-radius: 18px 18px 4px 18px; font-weight: 600;
+}
+.a-card { background: var(--surface); border: 2px solid var(--soft-border); border-left: 8px solid var(--accent); border-radius: var(--radius); padding: 14px 18px; animation: page-in 0.35s ease-out both; }
+.a-card.refused { border-left-color: var(--block); }
+.a-head { font-weight: 800; font-size: 1.15rem; margin: 0 0 4px; }
+.a-text { font-size: 1.1rem; margin: 4px 0 8px; }
+.steps-box { background: var(--warm); border-radius: 12px; padding: 10px 14px; margin: 8px 0 12px; }
+ol.chain { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 4px; align-items: center; padding: 0; margin: 4px 0 8px; }
+ol.chain li { display: inline-flex; align-items: center; gap: 4px; }
+.arrow { color: var(--primary); font-weight: 900; }
+.step-pill { border: 2px solid var(--accent); border-radius: 999px; padding: 2px 12px; font-weight: 700; font-size: 0.9rem; background: var(--surface); animation: pop 0.4s cubic-bezier(0.2, 1.4, 0.4, 1) both; }
+ol.chain li:nth-child(2) .step-pill { animation-delay: 0.12s; }
+ol.chain li:nth-child(3) .step-pill { animation-delay: 0.24s; }
+ol.chain li:nth-child(4) .step-pill { animation-delay: 0.36s; }
+ol.chain li:nth-child(5) .step-pill { animation-delay: 0.48s; }
+ol.chain li:nth-child(n+6) .step-pill { animation-delay: 0.6s; }
+.thinking { color: var(--muted); }
+.ask-form { position: sticky; bottom: 0; background: var(--bg); padding: 10px 0 6px; border-top: 2px solid var(--soft-border); margin-top: 16px; }
+.ask-row { display: flex; gap: 10px; align-items: stretch; flex-wrap: wrap; }
+.ask-row .input { flex: 1 1 260px; max-width: none; margin-top: 0; }
