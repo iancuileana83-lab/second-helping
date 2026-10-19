@@ -1,0 +1,19 @@
+{
+  "_comment": "Which generic medicine names belong to each group used by the safety rules. A group is used by the app only if reviewed is true. Fictional demo profiles only. Lists are short on purpose and must be completed or corrected by the reviewer.",
+  "version": "0.2",
+  "groups": {
+    "statins_grapefruit": { "label": "Statins affected by grapefruit", "members": ["simvastatin", "lovastatin", "atorvastatin"], "reviewed": true },
+    "ccb_dihydropyridine": { "label": "Dihydropyridine calcium-channel blockers", "members": ["felodipine", "nifedipine"], "reviewed": true },
+    "other_grapefruit_sensitive": { "label": "Other grapefruit-sensitive medicines", "members": ["ciclosporin", "tacrolimus", "amiodarone", "buspirone", "carbamazepine"], "reviewed": true },
+    "warfarin": { "label": "Warfarin", "members": ["warfarin"], "reviewed": true },
+    "sedatives": { "label": "Sedating medicines", "members": ["diazepam", "lorazepam", "temazepam", "zopiclone", "zolpidem", "chlorphenamine", "promethazine", "codeine", "morphine", "tramadol", "oxycodone", "amitriptyline", "mirtazapine", "quetiapine", "gabapentin", "pregabalin"], "reviewed": true },
+    "metformin": { "label": "Metformin", "members": ["metformin"], "reviewed": true },
+    "bp_and_water_tablets": { "label": "Blood-pressure and water tablets", "members": ["ramipril", "lisinopril", "enalapril", "perindopril", "losartan", "candesartan", "valsartan", "irbesartan", "amlodipine", "felodipine", "nifedipine", "bisoprolol", "atenolol", "furosemide", "bendroflumethiazide", "indapamide", "spironolactone"], "reviewed": true },
+    "raas_potassium": { "label": "ACE inhibitors, sartans and potassium-sparing medicines", "members": ["ramipril", "lisinopril", "enalapril", "perindopril", "losartan", "candesartan", "valsartan", "irbesartan", "spironolactone", "eplerenone"], "reviewed": true },
+    "maoi": { "label": "MAO inhibitors", "members": ["phenelzine", "tranylcypromine", "isocarboxazid", "moclobemide"], "reviewed": true },
+    "digoxin": { "label": "Digoxin", "members": ["digoxin"], "reviewed": true },
+    "levothyroxine": { "label": "Levothyroxine", "members": ["levothyroxine"], "reviewed": true },
+    "tetracycline_quinolone_antibiotics": { "label": "Tetracycline and quinolone antibiotics", "members": ["doxycycline", "tetracycline", "lymecycline", "oxytetracycline", "minocycline", "ciprofloxacin", "levofloxacin", "ofloxacin", "moxifloxacin"], "reviewed": true },
+    "insulin_sulfonylureas": { "label": "Insulin and sulfonylureas", "members": ["insulin", "gliclazide", "glimepiride", "glibenclamide"], "reviewed": true }
+  }
+}
