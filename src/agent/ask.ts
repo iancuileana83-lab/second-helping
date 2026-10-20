@@ -135,6 +135,11 @@ async function complete(ctx: AskContext, message: string): Promise<void> {
     }
     if (fresh.length > 0) ctx.checkSafety(fresh);
   }
+  // The model may have searched with a filter that found nothing (for example a cuisine that has no such dish).
+  // Search again across every cuisine, so a plain request like "fish tonight" never ends without dishes.
+  if (!ctx.plan && ctx.checkedCuisines().length === 0 && queryTokens(message).length > 0) {
+    ctx.searchDishes(message, mealFromText(message));
+  }
   const unchecked = [...ctx.searchHits].filter((n) => !ctx.checked.some((v) => v.dish.name === n));
   if (unchecked.length > 0) ctx.checkSafety(unchecked);
   if (!ctx.plan && WANTS_PLACES.test(message) && ctx.checkedCuisines().length > 0) {

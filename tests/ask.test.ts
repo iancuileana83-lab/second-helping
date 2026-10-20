@@ -56,6 +56,43 @@ describe("example questions use tools and show their steps", () => {
   });
 });
 
+describe("an empty search never ends the answer without dishes", () => {
+  it("if the model searched with a filter that found nothing, the app searches every cuisine", async () => {
+    const filtered: AskAgent = async (ctx) => {
+      ctx.tasteProfile();
+      expect(ctx.searchDishes("fish", "dinner", "italian")).toEqual([]); // no Italian fish dish exists
+      ctx.checkSafety(["fish"]);
+      return "Here are some options.";
+    };
+    const r = await runAsk(margaret, "Margaret wants fish tonight, which restaurant?", { agent: filtered });
+    const names = r.groups.flatMap((g) => [...g.shown, ...g.excluded]).map((v) => v.dish.name);
+    expect(names.some((n) => /fish pie|steamed fish|salmon/i.test(n))).toBe(true);
+    expect(r.chain).not.toContain("(0 dishes)");
+    expect(r.groups.some((g) => g.place)).toBe(true);
+    expect(r.answer.endsWith(ASK)).toBe(true);
+  });
+
+  it("does not search again when the model's search already found dishes", async () => {
+    const good: AskAgent = async (ctx) => {
+      ctx.tasteProfile();
+      ctx.searchDishes("fish", "dinner");
+      return "Here are some options.";
+    };
+    const r = await runAsk(margaret, "Margaret wants fish tonight, which restaurant?", { agent: good });
+    expect(r.chain).toContain("Searched menus (3 dishes)");
+  });
+
+  it("a plain food question with no dish words does not trigger a menu search", async () => {
+    const r = await runAsk(margaret, "Can Margaret have grapefruit juice at breakfast?", {
+      agent: async (ctx) => {
+        ctx.checkSafety(["grapefruit juice"]);
+        return "I looked at the juice.";
+      },
+    });
+    expect(r.chain).not.toContain("Searched menus");
+  });
+});
+
 describe("every answer ends with the ask-your-pharmacist line", () => {
   it("normal answers, plans, refusals, and bent-rule requests all end with it", async () => {
     const questions = [
