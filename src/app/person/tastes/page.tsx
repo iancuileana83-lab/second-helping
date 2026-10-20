@@ -11,7 +11,7 @@ export default function TastesPage() {
   return (
     <>
       <h1><span aria-hidden="true">👤</span> Person: Tastes</h1>
-      <p className="lead">What does this person love to eat? Qloo will use these tastes to find places that fit them.</p>
+      <p className="lead">What does this person like to eat? Only the favourite cuisines (as tags), never the name, are used to ask Qloo which places people with similar tastes tend to enjoy.</p>
 
       <section className="card warm" aria-label="Start from an example">
         <h2>Quick start with a fictional example</h2>

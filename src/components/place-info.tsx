@@ -11,7 +11,7 @@ export function PlaceInfo({ place }: { place: Place }) {
   if (place.source === "SIMULATED") {
     return (
       <p className="small muted">
-        Taste match {Math.round(place.score * 100)} out of 100 (simulated, not Qloo). Typical {cuisine} dishes. Check the menu.
+        Simulated score {Math.round(place.score * 100)} out of 100 (made up, not Qloo). Typical {cuisine} dishes. Check the menu.
       </p>
     );
   }
@@ -23,7 +23,8 @@ export function PlaceInfo({ place }: { place: Place }) {
   return (
     <>
       <p className="small">
-        <strong>Qloo affinity {Math.round(place.score * 100)}%</strong>
+        <strong>Qloo affinity score {place.score.toFixed(2)}</strong>
+        <span className="muted"> (0 to 1)</span>
         {details.length > 0 && <span className="muted"> · {details.join(" · ")}</span>}
       </p>
       {place.website && (
@@ -34,7 +35,7 @@ export function PlaceInfo({ place }: { place: Place }) {
         </p>
       )}
       <p className="small muted">
-        Typical {cuisine} dishes, not this restaurant’s menu. Second Helping is not affiliated with this restaurant. Always check with
+        Qloo scores describe what groups of people with similar tastes tend to enjoy, not what one person will do. Typical {cuisine} dishes, not this restaurant’s menu. Second Helping is not affiliated with this restaurant. Always check with
         the restaurant.
       </p>
     </>

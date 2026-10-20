@@ -61,7 +61,7 @@ export function TasteMap() {
   return (
     <section className="card taste-map" aria-label="Taste map">
       <h2><span aria-hidden="true">🫧</span> Taste map</h2>
-      <p className="muted">Bigger bubbles mean a stronger taste match. Adding favourite dishes makes them grow.</p>
+      <p className="muted">Bigger bubbles mean people with similar tastes tend to enjoy that cuisine more. It describes groups, not what one person will do.</p>
       {failed && <p className="notice" role="alert">The taste map could not load. Please try again.</p>}
       {data && (
         <>
@@ -74,7 +74,7 @@ export function TasteMap() {
                 <li key={c.cuisine} className="bubble" style={style}>
                   <span className="b-icon" aria-hidden="true">{opt?.icon}</span>
                   <span className="b-label">{opt?.label ?? c.cuisine}</span>
-                  <span className="b-score small">{Math.round(c.score * 100)}%</span>
+                  <span className="b-score small">{c.score.toFixed(2)}</span>
                 </li>
               );
             })}
@@ -83,8 +83,8 @@ export function TasteMap() {
             {data.tasteSource.simulated
               ? data.tasteSource.fallback
                 ? "Qloo could not be reached just now, so this map is SIMULATED, NOT QLOO."
-                : "SIMULATED affinity, NOT QLOO. With the real Qloo API these sizes will show true taste affinity."
-              : "Affinity from Qloo. Bubble sizes show how strongly each favourite matches, relative to the other favourites."}
+                : "SIMULATED scores, NOT QLOO. They are made up."
+              : "Affinity scores from Qloo (0 to 1), a group-level measure. Bubble sizes are relative to the other favourites."}
           </p>
         </>
       )}

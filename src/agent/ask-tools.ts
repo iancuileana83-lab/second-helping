@@ -101,7 +101,7 @@ export class AskContext {
     return tasteSourceFor(shown.length > 0 ? shown : [...this.places.values()].map((p) => p.source));
   }
 
-  /** Tool 2: places ranked by taste (simulated now, Qloo later). */
+  /** Tool 2: places ranked by Qloo's group-level affinity (or the labelled stand-in). */
   async findPlaces(cuisine?: string): Promise<Place[]> {
     this.mark("places");
     const found = await this.provider.recommendPlaces(this.person.taste, { cuisine, take: 3 });
@@ -195,7 +195,7 @@ export class AskContext {
       } else if (k === "places") {
         steps.push({
           short: `Found ${plural(top.length, "place")}`,
-          detail: `${top.map((p) => p.name).join("; ") || "none"}. Ranked by taste, ${this.source()}.`,
+          detail: `${top.map((p) => p.name).join("; ") || "none"}. Ranked by affinity (what people with similar tastes tend to enjoy), ${this.source()}.`,
         });
       } else if (k === "check") {
         steps.push({

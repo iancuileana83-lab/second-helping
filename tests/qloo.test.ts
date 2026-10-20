@@ -102,7 +102,8 @@ describe("reading Qloo responses", () => {
   it("turns entities into places with affinity, distance in km, rating and website", () => {
     const [p] = parsePlaces(response(entity()));
     expect(p).toMatchObject({ id: "qloo-AAAA-0001", name: "Test Trattoria", cuisine: "italian", source: "QLOO", score: 0.95, distanceKm: 1.2, rating: 4.5, address: "1 Example St", website: "https://example.test/" });
-    expect(p.reason).toContain("Qloo taste match 95%");
+    expect(p.reason).toContain("Qloo affinity score 0.95");
+    expect(p.reason).toContain("people with similar tastes tend to enjoy");
   });
 
   it("skips closed places, nameless entities, unknown cuisines and non-http websites", () => {

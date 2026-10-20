@@ -152,7 +152,7 @@ export async function weeklyPlan(person: DemoPerson): Promise<WeeklyPlan> {
     );
   }
   if (slots.some((s) => restNames.has(s.cuisine))) {
-    notes.push("Some meals come from cuisines that are a weaker taste match, to fill the week.");
+    notes.push("Some meals come from cuisines that are not among their favourites, to fill the week.");
   }
   if (slots.some((s) => s.verdict.status !== "ok")) {
     notes.push("Some meals carry a caution or a suggested swap. They are shown with the reason.");

@@ -13,17 +13,15 @@ export default function AboutPage() {
       <section className="card warm">
         <h2><span aria-hidden="true">🧭</span> How Qloo is used</h2>
         <p>
-          Qloo is a taste-intelligence service. Second Helping uses it to answer: <em>which cuisines and places fit this
-          person’s real taste?</em> The favourite cuisines and dishes you choose become the taste signals, and Qloo ranks
+          Qloo is a taste-intelligence service. Second Helping uses it to answer: <em>which places do people with similar tastes tend to enjoy?</em> The favourite cuisines and dishes you choose become the taste signals, and Qloo ranks
           places by how well they match.
         </p>
-        <p>Qloo only ranks by taste. It does not decide what is safe. That is the job of the written safety rules.</p>
+        <p>Qloo describes what groups of people tend to like. It does not predict what one person will do, and it does not decide what is safe. That is the job of the written safety rules. Only cuisine tags and a city-centre point are sent to Qloo: never a name, an email, a device ID, medicines or health details.</p>
         {simulated ? (
           <p className="banner"><strong>{SIMULATED_BANNER}.</strong> Right now the places and scores come from a clearly labelled stand-in with made-up places. The real Qloo connection will replace it.</p>
         ) : (
           <p>
-            <strong>Qloo is connected.</strong> The restaurants are real businesses near the city you choose, ranked by Qloo’s affinity to the
-            person’s favourite cuisines. If Qloo cannot be reached, the app says so and shows clearly labelled made-up places instead.
+            <strong>Qloo is connected.</strong> The restaurants are real businesses near the city you choose, ranked by Qloo’s affinity score for the person’s favourite cuisines (a group-level score). If Qloo cannot be reached, the app says so and shows clearly labelled made-up places instead.
             Second Helping is not affiliated with these restaurants. Dishes are typical for the cuisine, not their menu, so always check with the restaurant.
           </p>
         )}

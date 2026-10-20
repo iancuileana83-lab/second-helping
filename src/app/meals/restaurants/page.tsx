@@ -11,7 +11,7 @@ function PlaceCard({ r, first = false }: { r: PlaceResult; first?: boolean }) {
   return (
     <section className="card" aria-label={r.place.name}>
       <h3><span aria-hidden="true">📍</span> {r.place.name}</h3>
-      <p><strong>Why this suits them:</strong> {r.why}</p>
+      <p><strong>Why it may suit them:</strong> {r.why}</p>
       <PlaceInfo place={r.place} />
       {r.shown.length > 0 ? <VerdictList items={r.shown} replay hint={first} /> : <p>No typical dishes here passed the checks.</p>}
       <ExcludedBox items={r.excluded} where="at this place" />
@@ -25,7 +25,7 @@ export default function RestaurantsPage() {
   return (
     <>
       <h1><span aria-hidden="true">🍽️</span> Meal ideas: Restaurants</h1>
-      <p className="lead">Places ranked by taste, with each typical dish checked against the safety rules.</p>
+      <p className="lead">Places that people with similar tastes tend to enjoy, with each typical dish checked against the safety rules.</p>
       <ProfileGate>
         <RunButton loading={loading} onClick={run}>Find restaurants</RunButton>
         <div aria-live="polite">

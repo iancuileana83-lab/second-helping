@@ -23,7 +23,7 @@ export function SimulatedNote({ simulated, fallback = false }: { simulated: bool
   }
   return (
     <p className="small muted">
-      Places and taste scores come from Qloo. They are real restaurants. Second Helping is not affiliated with these restaurants; dishes are
+      Places and scores come from Qloo. They are real restaurants, and the scores describe what groups of people with similar tastes tend to enjoy, not what one person will do. Second Helping is not affiliated with these restaurants; dishes are
       typical for the cuisine, not their menu, so always check with the restaurant.
     </p>
   );

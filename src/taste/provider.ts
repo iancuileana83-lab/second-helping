@@ -13,7 +13,7 @@ export interface Place {
   id: string;
   name: string;
   cuisine: string;
-  /** 0 to 1, higher means a closer match to the person's taste. For Qloo this is its affinity. */
+  /** 0 to 1. For Qloo this is its affinity score: a group-level tendency, not a prediction about one person. */
   score: number;
   /** Plain-language reason shown to the family. */
   reason: string;
@@ -26,7 +26,7 @@ export interface Place {
   website?: string;
 }
 
-/** How strongly one cuisine matches the person's taste. */
+/** How strongly people with similar tastes tend to enjoy one cuisine (a group-level score, not a prediction about one person). */
 export interface CuisineAffinity {
   cuisine: string;
   score: number;

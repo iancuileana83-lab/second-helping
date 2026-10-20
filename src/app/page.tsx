@@ -34,7 +34,7 @@ export default function Home() {
         <article className="card">
           <p className="icon" aria-hidden="true">🍽️</p>
           <h2>2. See meal ideas</h2>
-          <p>Restaurants ranked by taste, dishes to cook at home, and a plan for the week.</p>
+          <p>Restaurants that people with similar tastes tend to enjoy, dishes to cook at home, and a plan for the week.</p>
         </article>
         <article className="card">
           <p className="icon" aria-hidden="true">🛡️</p>

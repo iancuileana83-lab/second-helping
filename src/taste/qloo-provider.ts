@@ -100,7 +100,7 @@ export function parsePlaces(json: unknown, requestedCuisine?: string): Place[] {
       name,
       cuisine,
       score,
-      reason: `Qloo taste match ${Math.round(score * 100)}% for ${label(cuisine)} food${distanceKm !== undefined ? `, ${distanceKm} km away` : ""}.`,
+      reason: `Qloo affinity score ${score.toFixed(2)} for ${label(cuisine)} food (people with similar tastes tend to enjoy places like this)${distanceKm !== undefined ? `, ${distanceKm} km away` : ""}.`,
       source: "QLOO",
       address: typeof props.address === "string" ? props.address : undefined,
       rating: typeof props.business_rating === "number" ? Math.round(props.business_rating * 10) / 10 : undefined,
@@ -179,7 +179,7 @@ export class QlooTasteProvider implements TasteProvider {
           cuisine: c,
           score: Number(score.toFixed(3)),
           favourite: true,
-          reason: `Qloo taste match ${Math.round(score * 100)}% for ${label(c)} food.`,
+          reason: `Qloo affinity score ${score.toFixed(2)} for ${label(c)} food (people with similar tastes tend to enjoy it).`,
           source: "QLOO",
         };
       }),

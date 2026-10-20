@@ -25,7 +25,8 @@ const CUISINES = Object.keys(MENUS) as [string, ...string[]];
 const MAX_PLACES = 3;
 const MIN_GOOD_SCORE = 0.3;
 /** Wording that would sound like medical clearance. Rejected in model text. */
-const FORBIDDEN_WORDING = /\b(safe|safely|cure|cures|treat|treats|diagnos\w*|guarantee\w*|doctor[- ]approved)\b/i;
+const FORBIDDEN_WORDING =
+  /\b(safe|safely|cure|cures|treat|treats|diagnos\w*|guarantee\w*|doctor[- ]approved|predict\w*|(?:they|she|he|you) (?:will|would) (?:love|enjoy|like|adore)|(?:exactly|perfectly) (?:what|matches|suits)|exact taste|perfect (?:for|match))\b/i;
 
 function describePerson(p: DemoPerson, groupLabels: Record<string, { label: string }>): string[] {
   const out: string[] = [];
@@ -105,7 +106,7 @@ export async function runAgent(person: DemoPerson): Promise<PlanResult> {
         stopWhen: stepCountIs(6),
         abortSignal: AbortSignal.timeout(25_000),
         system:
-          "You help a family member choose a meal out for an older adult. Use findPlaces to see places ranked by their taste, then use checkMenu for the cuisines of the best places. Check two or three cuisines at most, then stop. Never give medical advice and never decide what is safe: the checks are done by the tools.",
+          "You help a family member choose a meal out for an older adult. Use findPlaces to see places ranked by Qloo's group-level affinity (what people with similar tastes tend to enjoy), then use checkMenu for the cuisines of the best places. Check two or three cuisines at most, then stop. Never give medical advice and never decide what is safe: the checks are done by the tools.",
         prompt: `The person is ${person.profile.name}. They enjoy these cuisines: ${person.taste.likedCuisines.join(", ")}. Dishes they like: ${person.taste.likedDishes.join(", ")}. Explore their liked cuisines first.`,
       });
     } catch (err) {
@@ -140,7 +141,7 @@ export async function runAgent(person: DemoPerson): Promise<PlanResult> {
     return { place, why: templateWhy(place, s.shown.length), shown: s.shown, excluded: s.excluded };
   });
 
-  let intro = `Here are ideas for ${person.profile.name}, ranked by taste and checked against our safety rules. Always check the menu.`;
+  let intro = `Here are places that people with similar tastes tend to enjoy, with each typical dish checked against our safety rules. Always check with the restaurant.`;
   let wording: PlanResult["wording"] = "template";
   let wordingNote = agentNote;
 
@@ -162,8 +163,8 @@ export async function runAgent(person: DemoPerson): Promise<PlanResult> {
           }),
         }),
         system:
-          "You write short, warm, plain-language wording for a family member or carer choosing a meal out for an older adult. Write about the person in the third person (they, their), not 'you'. Use only the facts given. One sentence per place, saying why the cuisine or place suits their taste. Do not name any dish, because the app lists and checks dishes itself. Places can be real restaurants: use a place only by its given name and never claim what it serves, its menu or its quality. Do not mention medicines or health conditions. Never say anything is safe and never give medical advice. Do not use hype words. Write complete, grammatical sentences: never leave out a verb such as \"is\" (write \"and it is close by\", not \"and it close by\").",
-        prompt: `Person: ${person.profile.name}. Write one intro sentence and one 'why this suits them' per place.\nFacts: ${JSON.stringify(facts)}`,
+          "You write short, warm, plain-language wording for a family member or carer choosing a meal out for an older adult. Write about the person in the third person (they, their), not 'you'. Use only the facts given. One sentence per place, saying why the cuisine or place suits their taste. Do not name any dish, because the app lists and checks dishes itself. Places can be real restaurants: use a place only by its given name and never claim what it serves, its menu or its quality. Do not mention medicines or health conditions. Never say anything is safe and never give medical advice. Do not use hype words. Qloo scores describe what groups of people with similar tastes tend to enjoy: say that (for example 'people with similar tastes tend to enjoy this kind of place'), and never say the person will love or enjoy it, or that it matches their exact taste. Write complete, grammatical sentences: never leave out a verb such as \"is\" (write \"and it is close by\", not \"and it close by\").",
+        prompt: `Person: ${person.profile.name}. Write one intro sentence and one 'why it may suit them' per place.\nFacts: ${JSON.stringify(facts)}`,
       });
       if (wordingOk(output.intro)) intro = output.intro;
       let used = 0;
