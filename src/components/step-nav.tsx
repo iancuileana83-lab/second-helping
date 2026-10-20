@@ -9,8 +9,22 @@ export function StepNav({ back, next }: { back?: { href: string; label: string }
   );
 }
 
-export function SimulatedNote({ simulated }: { simulated: boolean }) {
-  return simulated ? (
-    <p className="small muted">Taste matching here is SIMULATED, NOT QLOO. The places are made up.</p>
-  ) : null;
+/** Says where the taste data on a page came from: Qloo, the labelled stand-in, or the stand-in after a Qloo failure. */
+export function SimulatedNote({ simulated, fallback = false }: { simulated: boolean; fallback?: boolean }) {
+  if (simulated && fallback) {
+    return (
+      <p className="notice" role="status">
+        Qloo could not be reached just now, so the places and taste scores here are made up (SIMULATED, NOT QLOO).
+      </p>
+    );
+  }
+  if (simulated) {
+    return <p className="small muted">Taste matching here is SIMULATED, NOT QLOO. The places are made up.</p>;
+  }
+  return (
+    <p className="small muted">
+      Places and taste scores come from Qloo. They are real restaurants. SafePlate is not affiliated with these restaurants; dishes are
+      typical for the cuisine, not their menu, so always check with the restaurant.
+    </p>
+  );
 }

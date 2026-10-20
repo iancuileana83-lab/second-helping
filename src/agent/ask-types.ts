@@ -1,6 +1,6 @@
 import type { WeeklyPlan } from "@/lib/meals";
 import type { Verdict } from "@/safety/types";
-import type { Place } from "@/taste/provider";
+import type { Place, TasteSourceInfo } from "@/taste/provider";
 
 export interface AskStep {
   /** Short label for the visible chain, e.g. "Checked 22 rules". */
@@ -27,6 +27,6 @@ export interface AskResult {
   steps: AskStep[];
   groups: AskGroup[];
   plan: WeeklyPlan | null;
-  tasteSource: { name: string; simulated: boolean };
+  tasteSource: TasteSourceInfo;
   activeRules: number;
 }

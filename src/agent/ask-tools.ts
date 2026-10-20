@@ -4,7 +4,8 @@ import { weeklyPlan, type WeeklyPlan } from "@/lib/meals";
 import { CUISINE_OPTIONS } from "@/lib/profile";
 import { evaluateDish } from "@/safety";
 import type { ActiveRules, Dish, Meal, Verdict } from "@/safety";
-import type { Place, TasteProvider } from "@/taste";
+import { tasteSourceFor } from "@/taste";
+import type { Place, TasteProvider, TasteSourceInfo } from "@/taste";
 import type { AskGroup, AskStep } from "./ask-types";
 
 const SYNONYMS: Record<string, string[]> = {
@@ -91,7 +92,13 @@ export class AskContext {
   }
 
   source() {
-    return this.provider.simulated ? "SIMULATED taste data, not Qloo" : "Qloo";
+    return tasteSourceFor([...this.places.values()].map((p) => p.source)).simulated ? "SIMULATED taste data, not Qloo" : "Qloo";
+  }
+
+  /** Where the places in this answer came from, for the labels. */
+  tasteSource(): TasteSourceInfo {
+    const shown = this.groups().flatMap((g) => (g.place ? [g.place.source] : []));
+    return tasteSourceFor(shown.length > 0 ? shown : [...this.places.values()].map((p) => p.source));
   }
 
   /** Tool 2: places ranked by taste (simulated now, Qloo later). */

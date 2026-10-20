@@ -27,7 +27,7 @@ export default function WeeklyPlanPage() {
             <>
               <Celebrate key={burst} />
               <p className="notice ready" role="status"><span aria-hidden="true">🎉</span> Your week is ready.</p>
-              <SimulatedNote simulated={data.tasteSource.simulated} />
+              <SimulatedNote simulated={data.tasteSource.simulated} fallback={data.tasteSource.fallback} />
               {data.notes.map((n) => <p className="notice" key={n}>{n}</p>)}
               <WeekGrid plan={data} />
               <p className="small muted">{data.excludedCount} dishes were left out by the rules and never appear in the plan. Typical dishes only, so check the ingredients.</p>

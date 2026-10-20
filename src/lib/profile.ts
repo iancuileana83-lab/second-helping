@@ -6,11 +6,28 @@ import type { DemoPerson } from "@/data/demo-profiles";
 /** A fictional profile built by the user. Only fixed choices are allowed, never free text (except the name). */
 export interface UserProfile {
   name: string;
+  /** One of the fixed city presets. Defaults to New York. */
+  city?: string;
   cuisines: string[];
   dishes: string[];
   medicineGroups: string[];
   conditions: Condition[];
   needs: Need[];
+}
+
+export const CITY_OPTIONS = [
+  { id: "new-york", label: "New York", lat: 40.7128, lon: -74.006 },
+  { id: "london", label: "London", lat: 51.5072, lon: -0.1276 },
+  { id: "chicago", label: "Chicago", lat: 41.8781, lon: -87.6298 },
+  { id: "los-angeles", label: "Los Angeles", lat: 34.0522, lon: -118.2437 },
+  { id: "toronto", label: "Toronto", lat: 43.6532, lon: -79.3832 },
+  { id: "bucharest", label: "Bucharest", lat: 44.4268, lon: 26.1025 },
+] as const;
+
+export const DEFAULT_CITY = "new-york";
+
+export function cityOf(id: string | undefined) {
+  return CITY_OPTIONS.find((c) => c.id === id) ?? CITY_OPTIONS[0];
 }
 
 export const CUISINE_OPTIONS = [
@@ -58,6 +75,7 @@ export const MEDICINE_GROUP_OPTIONS = Object.entries(groups)
   .filter(([, g]) => g.reviewed === true)
   .map(([id, g]) => ({ id, label: g.label, members: g.members }));
 
+const cityIds = CITY_OPTIONS.map((c) => c.id) as [string, ...string[]];
 const cuisineIds = CUISINE_OPTIONS.map((c) => c.id) as [string, ...string[]];
 const dishIds = DISH_OPTIONS.map((d) => d.id) as [string, ...string[]];
 const groupIds = MEDICINE_GROUP_OPTIONS.map((g) => g.id) as [string, ...string[]];
@@ -68,6 +86,7 @@ export const NAME_PATTERN = /^[\p{L}][\p{L} '-]{0,29}$/u;
 
 export const userProfileSchema = z.object({
   name: z.string().trim().regex(NAME_PATTERN),
+  city: z.enum(cityIds).optional(),
   cuisines: z.array(z.enum(cuisineIds)).max(cuisineIds.length),
   dishes: z.array(z.enum(dishIds)).max(dishIds.length),
   medicineGroups: z.array(z.enum(groupIds)).max(groupIds.length),
@@ -77,6 +96,7 @@ export const userProfileSchema = z.object({
 
 export const EMPTY_PROFILE: UserProfile = {
   name: "",
+  city: DEFAULT_CITY,
   cuisines: [],
   dishes: [],
   medicineGroups: [],
@@ -98,7 +118,7 @@ export function toDemoPerson(p: UserProfile, id = "custom"): DemoPerson {
       likedCuisines: p.cuisines,
       likedPlaces: [],
       likedDishes: p.dishes,
-      location: { lat: 51.5, lon: -0.12 },
+      location: { lat: cityOf(p.city).lat, lon: cityOf(p.city).lon },
     },
   };
 }
@@ -110,6 +130,7 @@ export const EXAMPLES: { id: string; blurb: string; profile: UserProfile }[] = [
     blurb: "Loves Italian and Greek food. Takes a statin, a blood-pressure tablet and warfarin.",
     profile: {
       name: "Margaret",
+      city: DEFAULT_CITY,
       cuisines: ["italian", "greek"],
       dishes: ["pasta", "moussaka"],
       medicineGroups: ["statins_grapefruit", "bp_and_water_tablets", "raas_potassium", "warfarin"],
@@ -122,6 +143,7 @@ export const EXAMPLES: { id: string; blurb: string; profile: UserProfile }[] = [
     blurb: "Enjoys a roast and a curry. Has diabetes and chewing problems.",
     profile: {
       name: "George",
+      city: DEFAULT_CITY,
       cuisines: ["british", "indian"],
       dishes: ["roast", "curry"],
       medicineGroups: ["metformin", "sedatives", "levothyroxine"],
@@ -134,6 +156,7 @@ export const EXAMPLES: { id: string; blurb: string; profile: UserProfile }[] = [
     blurb: "Likes congee and udon. Heart failure and swallowing difficulty.",
     profile: {
       name: "Dorothy",
+      city: DEFAULT_CITY,
       cuisines: ["chinese", "japanese"],
       dishes: ["congee", "udon"],
       medicineGroups: ["tetracycline_quinolone_antibiotics", "bp_and_water_tablets"],
@@ -144,7 +167,7 @@ export const EXAMPLES: { id: string; blurb: string; profile: UserProfile }[] = [
 ];
 
 export function profileSummary(p: UserProfile): string[] {
-  const out: string[] = [];
+  const out: string[] = [`Restaurants near: ${cityOf(p.city).label}`];
   const label = (list: readonly { id: string; label: string }[], ids: string[]) =>
     ids.map((i) => list.find((x) => x.id === i)?.label ?? i);
   if (p.cuisines.length) out.push(`Likes: ${label(CUISINE_OPTIONS, p.cuisines).join(", ")} food`);

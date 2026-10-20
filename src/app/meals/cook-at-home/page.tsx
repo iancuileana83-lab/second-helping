@@ -19,13 +19,15 @@ export default function CookAtHomePage() {
           <ErrorNote message={error} />
           {data && (
             <>
-              <SimulatedNote simulated={data.tasteSource.simulated} />
+              <SimulatedNote simulated={data.tasteSource.simulated} fallback={data.tasteSource.fallback} />
               {data.cuisines.map((c, ci) => {
                 const opt = CUISINE_OPTIONS.find((o) => o.id === c.cuisine);
                 return (
                   <section className="card" key={c.cuisine} aria-label={`${opt?.label ?? c.cuisine} dishes`}>
                     <h3><span aria-hidden="true">{opt?.icon}</span> {opt?.label ?? c.cuisine} dishes</h3>
-                    <p className="small muted">Taste match {Math.round(c.match * 100)} out of 100 (simulated, not Qloo).</p>
+                    <p className="small muted">
+                      {!c.favourite ? "Not one of their favourites; shown for variety." : c.source === "QLOO" ? `Qloo affinity ${Math.round(c.match * 100)}%.` : `Taste match ${Math.round(c.match * 100)} out of 100 (simulated, not Qloo).`}
+                    </p>
                     {c.shown.length > 0 ? <VerdictList items={c.shown} replay hint={ci === 0} /> : <p>No dishes here passed the checks.</p>}
                     <ExcludedBox items={c.excluded} where="for this cuisine" />
                   </section>

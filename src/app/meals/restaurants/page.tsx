@@ -4,6 +4,7 @@ import type { PlaceResult, PlanResult } from "@/agent/types";
 import { CompareToggle } from "@/components/compare";
 import { ErrorNote, ProfileGate, RunButton, useMealRequest } from "@/components/meal-tools";
 import { SimulatedNote } from "@/components/step-nav";
+import { PlaceInfo } from "@/components/place-info";
 import { ExcludedBox, VerdictList } from "@/components/verdicts";
 
 function PlaceCard({ r, first = false }: { r: PlaceResult; first?: boolean }) {
@@ -11,10 +12,7 @@ function PlaceCard({ r, first = false }: { r: PlaceResult; first?: boolean }) {
     <section className="card" aria-label={r.place.name}>
       <h3><span aria-hidden="true">📍</span> {r.place.name}</h3>
       <p><strong>Why this suits them:</strong> {r.why}</p>
-      <p className="small muted">
-        Taste match {Math.round(r.place.score * 100)} out of 100 ({r.place.source === "SIMULATED" ? "simulated, not Qloo" : "Qloo"}).
-        Typical {r.place.cuisine[0].toUpperCase() + r.place.cuisine.slice(1)} dishes. Check the menu.
-      </p>
+      <PlaceInfo place={r.place} />
       {r.shown.length > 0 ? <VerdictList items={r.shown} replay hint={first} /> : <p>No typical dishes here passed the checks.</p>}
       <ExcludedBox items={r.excluded} where="at this place" />
     </section>
@@ -35,7 +33,8 @@ export default function RestaurantsPage() {
           {data && (
             <>
               <p>{data.intro}</p>
-              <SimulatedNote simulated={data.tasteSource.simulated} />
+              <SimulatedNote simulated={data.tasteSource.simulated} fallback={data.tasteSource.fallback} />
+              {data.places.length === 0 && <p className="notice">No restaurants for these cuisines were found near the chosen city. Try another city or add more favourite cuisines.</p>}
               <CompareToggle />
               {data.places.map((r, i) => (
                 <PlaceCard key={r.place.id} r={r} first={i === 0} />

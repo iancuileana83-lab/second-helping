@@ -2,11 +2,11 @@
 
 Meal and restaurant ideas for older adults, matched to their taste and checked by a transparent, reviewed food-medicine and texture safety layer.
 
-> **Not medical advice. Fictional people and data only.** SafePlate is a hackathon demo. It does not replace a pharmacist, doctor or speech and language therapist. Dishes are typical for a cuisine, not the exact menu of any place, so always check the menu. Ask your pharmacist or doctor about real medicines.
+> **Not medical advice. The people in this demo are fictional.** SafePlate is a hackathon demo. It does not replace a pharmacist, doctor or speech and language therapist. Restaurants come from Qloo and are real businesses; SafePlate is not affiliated with them. Dishes are typical for the cuisine, not their menu, so always check with the restaurant. Ask your pharmacist or doctor about real medicines.
 
 Built for the Qloo Agent Hackathon.
 
-**Status:** Qloo is **not connected yet**. The app currently ranks places with a clearly labelled stand-in, and the yellow banner **"SIMULATED TASTE DATA, NOT QLOO"** shows on every page. The real Qloo client will plug in behind the same interface (see [Qloo](#qloo)). **Live demo: https://safeplate-nu.vercel.app** (hosted on the Vercel free Hobby plan; no login needed).
+**Status:** Qloo is connected: restaurants are real places near the chosen city (New York by default), ranked by Qloo's affinity to the person's favourite cuisines. If Qloo cannot be reached, the app says so and shows clearly labelled made-up places (the yellow **"SIMULATED TASTE DATA, NOT QLOO"** banner shows whenever no Qloo key is set). **Live demo: https://safeplate-nu.vercel.app** (hosted on the Vercel free Hobby plan; no login needed).
 
 ## What it does
 
@@ -39,10 +39,13 @@ Press **Why? ↻** on a dish card to flip it and see the rule behind its badge. 
 
 ## Qloo
 
-Qloo is meant to provide the taste ranking: which cuisines and places fit this person's real taste. SafePlate then filters everything through the safety layer. Qloo never decides what is safe.
+Qloo provides the taste ranking: which restaurants fit this person's real taste. SafePlate then checks every typical dish through the safety layer. Qloo never decides what is safe.
 
-- **Now:** `MockTasteProvider` (`src/taste/mock-taste-provider.ts`) returns made-up places with a simple overlap score. Everything it produces is labelled simulated.
-- **Next:** a `QlooTasteProvider` implementing the same `TasteProvider` interface (`src/taste/provider.ts`), using the Qloo Insights API (`GET /v2/insights`, `X-Api-Key` header, `filter.type=urn:entity:place`, cuisine tags and taste signals). It is not written yet. When `QLOO_API_KEY` is available it will replace the stand-in, and the banner will go away.
+- **What is called:** the Qloo Insights API on the hackathon server (`GET {QLOO_BASE_URL}/v2/insights`, key in the `X-Api-Key` header, parameters in the query string). Restaurants are filtered with the tag `urn:tag:genre:place:restaurant` near a `POINT(lon lat)` within 5 km, and the person's favourite cuisines (tags such as `urn:tag:genre:place:restaurant:italian`) are the `signal.interests.tags`. The response's `query.affinity` is the taste score.
+- **Cities:** New York (default), London, Chicago, Los Angeles, Toronto and Bucharest.
+- **Fallback:** `src/taste/index.ts` tries Qloo first and falls back to the labelled simulated provider (`src/taste/mock-taste-provider.ts`) when Qloo errors, times out or is rate limited. Every place carries its own source, so the UI always says whether it is Qloo or simulated.
+- **Cache and data rules:** Qloo responses are cached only in server memory for an hour. No Qloo data is stored in this repository: tests use invented fixtures. `npm run qloo:check` makes a few live calls and prints counts only.
+- **Dishes:** Qloo returns restaurants, not menus, so dishes are typical for the cuisine and the app tells people to check with the restaurant.
 
 ## Tech
 
@@ -71,7 +74,8 @@ Put these in `.env` yourself. `.env` is git-ignored. Never commit it or paste ke
 | --- | --- | --- |
 | `GOOGLE_GENERATIVE_AI_API_KEY` | Optional | A Google AI Studio key. Without it the app still works and uses plain template wording instead of AI wording. |
 | `GEMINI_MODEL` | Optional | Defaults to `gemini-3.5-flash-lite`. |
-| `QLOO_API_KEY` | Not used yet | Reserved for the real Qloo provider. |
+| `QLOO_API_KEY` | Optional | A Qloo hackathon key. Without it the app uses the labelled simulated provider. |
+| `QLOO_BASE_URL` | Optional | Defaults to `https://hackathon.api.qloo.com` (hackathon keys do not work on `api.qloo.com`). |
 
 ### Scripts
 
@@ -81,6 +85,7 @@ Put these in `.env` yourself. `.env` is git-ignored. Never commit it or paste ke
 | `npm run build` then `npm start` | Production build and server |
 | `npm test` | Run all tests |
 | `npm run typecheck` | TypeScript check |
+| `npm run qloo:check` | A few live Qloo calls, counts only (needs `QLOO_API_KEY` in `.env`) |
 
 ## Tests
 
@@ -106,7 +111,7 @@ tests/                     Vitest tests
 
 ## Safety and privacy notes
 
-- All people, places and dishes are fictional. Please do not enter real names or real health details.
+- All people are fictional. Restaurants (from Qloo) are real businesses; dishes are typical, not their menu. Please do not enter real names or real health details.
 - The server accepts only fixed choices (cuisines, dishes, reviewed medicine groups, conditions, needs). The only free text is a letters-only name.
 - The API has a best-effort per-IP rate limit to protect the free AI quota.
 - Nothing is stored on a server.

@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { SIMULATED_BANNER, getTasteProvider } from "@/taste";
+import { SIMULATED_BANNER, qlooConfigured } from "@/taste";
 
 export const metadata = { title: "About · SafePlate" };
 
 export default function AboutPage() {
-  const simulated = getTasteProvider().simulated;
+  const simulated = !qlooConfigured();
   return (
     <>
       <h1><span aria-hidden="true">ℹ️</span> About SafePlate</h1>
@@ -17,8 +17,14 @@ export default function AboutPage() {
           places by how well they match.
         </p>
         <p>Qloo only ranks by taste. It does not decide what is safe. That is the job of the written safety rules.</p>
-        {simulated && (
+        {simulated ? (
           <p className="banner"><strong>{SIMULATED_BANNER}.</strong> Right now the places and scores come from a clearly labelled stand-in with made-up places. The real Qloo connection will replace it.</p>
+        ) : (
+          <p>
+            <strong>Qloo is connected.</strong> The restaurants are real businesses near the city you choose, ranked by Qloo’s affinity to the
+            person’s favourite cuisines. If Qloo cannot be reached, the app says so and shows clearly labelled made-up places instead.
+            SafePlate is not affiliated with these restaurants. Dishes are typical for the cuisine, not their menu, so always check with the restaurant.
+          </p>
         )}
       </section>
 
@@ -55,7 +61,7 @@ export default function AboutPage() {
       <section className="card">
         <h2><span aria-hidden="true">🎭</span> Fictional data</h2>
         <p>
-          All people, places and dishes are made up. Please do not enter real names or real health details. Your profile
+          All people are made up. Please do not enter real names or real health details. Dishes are typical for a cuisine, and restaurants (when Qloo is connected) are real businesses. Your profile
           stays in your own browser and is not saved on a server.
         </p>
       </section>

@@ -323,3 +323,6 @@ ol.chain li:nth-child(n+6) .step-pill { animation-delay: 0.6s; }
 .ask-form { position: sticky; bottom: 0; background: var(--bg); padding: 10px 0 6px; border-top: 2px solid var(--soft-border); margin-top: 16px; }
 .ask-row { display: flex; gap: 10px; align-items: stretch; flex-wrap: wrap; }
 .ask-row .input { flex: 1 1 260px; max-width: none; margin-top: 0; }
+
+/* Shown when Qloo is connected */
+.qloo-badge { margin: 0; padding: 8px 16px; text-align: center; background: var(--warm); border-bottom: 2px solid var(--soft-border); font-size: 0.95rem; }

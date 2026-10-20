@@ -4,6 +4,7 @@ import { useRef, useState, type FormEvent } from "react";
 import type { AskGroup, AskResult } from "@/agent/ask-types";
 import { useProfile } from "@/components/profile-context";
 import { ProfileGate } from "@/components/meal-tools";
+import { PlaceInfo } from "@/components/place-info";
 import { SimulatedNote } from "@/components/step-nav";
 import { ExcludedBox, VerdictList } from "@/components/verdicts";
 import { WeekGrid } from "@/components/week-grid";
@@ -48,11 +49,7 @@ function Group({ g, first }: { g: AskGroup; first: boolean }) {
   return (
     <section className="card" aria-label={g.title}>
       <h3><span aria-hidden="true">{g.place ? "📍" : "🍽️"}</span> {g.title}</h3>
-      {g.place && (
-        <p className="small muted">
-          Taste match {Math.round(g.place.score * 100)} out of 100 ({g.place.source === "SIMULATED" ? "simulated, not Qloo" : "Qloo"}). Typical dishes. Check the menu.
-        </p>
-      )}
+      {g.place && <PlaceInfo place={g.place} />}
       {g.shown.length > 0 ? <VerdictList items={g.shown} replay={false} hint={first} /> : <p>No dishes here passed the checks.</p>}
       <ExcludedBox items={g.excluded} where="here" />
     </section>
@@ -68,7 +65,7 @@ function Answer({ turn }: { turn: Turn }) {
       {r.refused && <p className="a-head"><span aria-hidden="true">🚫</span> I can’t help with that one</p>}
       <p className="a-text">{r.answer}</p>
       <Chain result={r} />
-      <SimulatedNote simulated={r.tasteSource.simulated && r.groups.some((g) => g.place)} />
+      {r.groups.some((g) => g.place) && <SimulatedNote simulated={r.tasteSource.simulated} fallback={r.tasteSource.fallback} />}
       {r.groups.map((g, i) => <Group key={g.title} g={g} first={i === 0} />)}
       {r.plan && (
         <>

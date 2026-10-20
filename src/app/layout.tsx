@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { ProfileProvider } from "@/components/profile-context";
 import { SiteNav } from "@/components/site-nav";
 import { ReplayTourButton, Tour } from "@/components/tour";
-import { SIMULATED_BANNER, getTasteProvider } from "@/taste";
+import { SIMULATED_BANNER, qlooConfigured } from "@/taste";
 import "./globals.css";
 
 export const metadata = {
@@ -12,7 +12,7 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  const simulated = getTasteProvider().simulated;
+  const connected = qlooConfigured();
   return (
     <html lang="en">
       <head>
@@ -22,7 +22,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ProfileProvider>
           <SiteNav />
           <Tour />
-          {simulated && (
+          {connected ? (
+            <p role="status" className="qloo-badge">
+              <span aria-hidden="true">✨</span> Taste ranking by <strong>Qloo</strong>. Restaurants are real businesses; people are fictional.
+            </p>
+          ) : (
             <p role="status" className="banner">
               <span aria-hidden="true">⚠️</span> {SIMULATED_BANNER}. The places and taste scores are made up until the real Qloo connection is added.
             </p>
@@ -30,8 +34,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <main id="main">{children}</main>
           <footer className="footer">
             <p>
-              <strong>Not medical advice. Fictional people and data only.</strong> Dishes are typical for a cuisine, so
-              always check the menu. Ask your pharmacist or doctor about real medicines.
+              <strong>Not medical advice. The people in this demo are fictional.</strong>{" "}
+              {connected
+                ? "Restaurants come from Qloo and are real businesses. SafePlate is not affiliated with these restaurants; dishes are typical for the cuisine, not their menu, so always check with the restaurant. "
+                : "Places are made up while Qloo is not connected, and dishes are typical for a cuisine, so always check the menu. "}
+              Ask your pharmacist or doctor about real medicines.
             </p>
             <p><ReplayTourButton /></p>
           </footer>

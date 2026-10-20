@@ -3,21 +3,21 @@ import type { DemoPerson } from "@/data/demo-profiles";
 import { menuFor } from "@/data/menus";
 import { getActiveRules, screenDishes } from "@/safety";
 import type { Meal, Verdict } from "@/safety";
-import { getTasteProvider } from "@/taste";
-import type { Place } from "@/taste";
-
-const MIN_GOOD_SCORE = 0.3;
+import { getTasteProvider, tasteSourceFor } from "@/taste";
+import type { CuisineAffinity, TasteSource, TasteSourceInfo } from "@/taste";
 
 export interface HomeCuisine {
   cuisine: string;
   match: number;
   reason: string;
+  favourite: boolean;
+  source: TasteSource;
   shown: Verdict[];
   excluded: Verdict[];
 }
 
 export interface HomeIdeas {
-  tasteSource: { name: string; simulated: boolean };
+  tasteSource: TasteSourceInfo;
   cuisines: HomeCuisine[];
 }
 
@@ -29,7 +29,7 @@ export interface PlanSlot {
 }
 
 export interface WeeklyPlan {
-  tasteSource: { name: string; simulated: boolean };
+  tasteSource: TasteSourceInfo;
   slots: PlanSlot[];
   notes: string[];
   excludedCount: number;
@@ -39,16 +39,14 @@ export { DAYS };
 
 const STATUS_ORDER: Record<Verdict["status"], number> = { ok: 0, warn: 1, swap: 2, blocked: 3 };
 
-/** Best place per cuisine from the taste provider, strongest first. */
+/** Cuisines from the taste provider: favourites first, strongest first; the rest only fill gaps. */
 async function rankedCuisines(person: DemoPerson) {
-  const provider = getTasteProvider();
-  const places = await provider.recommendPlaces(person.taste, { take: 50 });
-  const best = new Map<string, Place>();
-  for (const p of places) if (!best.has(p.cuisine)) best.set(p.cuisine, p);
-  const ranked = [...best.values()].sort((a, b) => b.score - a.score);
-  const strong = ranked.filter((p) => p.score >= MIN_GOOD_SCORE);
-  const main = strong.length > 0 ? strong : ranked;
-  return { provider, ranked: main, rest: ranked.filter((p) => !main.includes(p)) };
+  const affinities = await getTasteProvider().cuisineAffinities(person.taste);
+  const sorted = [...affinities].sort((x, y) => y.score - x.score);
+  const favourites = sorted.filter((a) => a.favourite);
+  const main: CuisineAffinity[] = favourites.length > 0 ? favourites : sorted;
+  const rest = sorted.filter((a) => !main.includes(a));
+  return { ranked: main, rest, tasteSource: tasteSourceFor(main.map((a) => a.source)) };
 }
 
 function byStatus(a: Verdict, b: Verdict) {
@@ -56,38 +54,37 @@ function byStatus(a: Verdict, b: Verdict) {
 }
 
 export interface TasteAffinity {
-  tasteSource: { name: string; simulated: boolean };
+  tasteSource: TasteSourceInfo;
   /** Favourite cuisines only, with a 0 to 1 affinity from the taste provider. */
   cuisines: { cuisine: string; score: number }[];
 }
 
-/** Affinity of each favourite cuisine, from the taste provider (simulated now, Qloo later). */
+/** Affinity of each favourite cuisine, from the taste provider (Qloo, or the labelled stand-in). */
 export async function tasteAffinity(person: DemoPerson): Promise<TasteAffinity> {
-  const provider = getTasteProvider();
-  const places = await provider.recommendPlaces(person.taste, { take: 50 });
-  const best = new Map<string, number>();
-  for (const p of places) best.set(p.cuisine, Math.max(best.get(p.cuisine) ?? 0, p.score));
-  const cuisines = person.taste.likedCuisines
-    .filter((c) => best.has(c))
-    .map((c) => ({ cuisine: c, score: best.get(c) as number }))
-    .sort((a, b) => b.score - a.score);
-  return { tasteSource: { name: provider.name, simulated: provider.simulated }, cuisines };
+  const { ranked, tasteSource } = await rankedCuisines(person);
+  const cuisines = ranked
+    .filter((a) => a.favourite)
+    .map((a) => ({ cuisine: a.cuisine, score: a.score }))
+    .sort((x, y) => y.score - x.score);
+  return { tasteSource, cuisines };
 }
 
 export async function homeIdeas(person: DemoPerson): Promise<HomeIdeas> {
   const active = getActiveRules();
-  const { provider, ranked } = await rankedCuisines(person);
+  const { ranked, tasteSource } = await rankedCuisines(person);
   const cuisines = ranked.map((p): HomeCuisine => {
     const s = screenDishes(menuFor(p.cuisine), person.profile, active);
     return {
       cuisine: p.cuisine,
       match: p.score,
       reason: p.reason,
+      favourite: p.favourite,
+      source: p.source,
       shown: [...s.shown].sort(byStatus),
       excluded: s.excluded,
     };
   });
-  return { tasteSource: { name: provider.name, simulated: provider.simulated }, cuisines };
+  return { tasteSource, cuisines };
 }
 
 /**
@@ -96,7 +93,7 @@ export async function homeIdeas(person: DemoPerson): Promise<HomeIdeas> {
  */
 export async function weeklyPlan(person: DemoPerson): Promise<WeeklyPlan> {
   const active = getActiveRules();
-  const { provider, ranked, rest } = await rankedCuisines(person);
+  const { ranked, rest, tasteSource } = await rankedCuisines(person);
   const notes: string[] = [];
   const restNames = new Set(rest.map((p) => p.cuisine));
 
@@ -160,5 +157,5 @@ export async function weeklyPlan(person: DemoPerson): Promise<WeeklyPlan> {
   if (slots.some((s) => s.verdict.status !== "ok")) {
     notes.push("Some meals carry a caution or a suggested swap. They are shown with the reason.");
   }
-  return { tasteSource: { name: provider.name, simulated: provider.simulated }, slots, notes, excludedCount };
+  return { tasteSource, slots, notes, excludedCount };
 }

@@ -5,7 +5,8 @@ import type { DemoPerson } from "@/data/demo-profiles";
 import { MENUS, menuFor } from "@/data/menus";
 import { getActiveRules, screenDishes } from "@/safety";
 import type { Screening } from "@/safety";
-import { getTasteProvider } from "@/taste";
+import { getTasteProvider, tasteSourceFor } from "@/taste";
+import { diversify } from "@/taste/qloo-provider";
 import type { Place } from "@/taste";
 import { MODEL_ID } from "./model";
 import type { PlaceResult, PlanResult } from "./types";
@@ -42,8 +43,11 @@ function templateWhy(place: Place, shownCount: number): string {
   return `${place.reason} ${shownCount} typical dish${shownCount === 1 ? "" : "es"} passed our checks.`;
 }
 
-function wordingOk(text: string): boolean {
-  return text.length > 0 && text.length <= 400 && !FORBIDDEN_WORDING.test(text);
+/** A slip Gemini sometimes makes: dropping the verb, as in "and it conveniently close by". Such wording is replaced by the plain template. */
+const GRAMMAR_SLIPS = /\b(and|but|because|so) it (conveniently|nearby|close by|close to|near|located|situated)\b/i;
+
+export function wordingOk(text: string): boolean {
+  return text.length > 0 && text.length <= 400 && !FORBIDDEN_WORDING.test(text) && !GRAMMAR_SLIPS.test(text);
 }
 
 export async function runAgent(person: DemoPerson): Promise<PlanResult> {
@@ -117,10 +121,18 @@ export async function runAgent(person: DemoPerson): Promise<PlanResult> {
     for (const p of places) seenPlaces.set(p.id, p);
     trace.push(`Looked for places by taste: found ${places.length}.`);
   }
+  // The code, not the model, makes sure every favourite cuisine (up to three) was looked at.
+  for (const c of person.taste.likedCuisines.slice(0, MAX_PLACES)) {
+    if ([...seenPlaces.values()].some((p) => p.cuisine === c)) continue;
+    const places = await provider.recommendPlaces(person.taste, { cuisine: c, take: MAX_PLACES });
+    for (const p of places) seenPlaces.set(p.id, p);
+    trace.push(`Looked for places serving ${c} food: found ${places.length}.`);
+  }
   const ranked = [...seenPlaces.values()].sort((a, b) => b.score - a.score);
   // Skip weak matches when there are good ones, so the shortlist stays relevant.
   const strong = ranked.filter((p) => p.score >= MIN_GOOD_SCORE);
-  const top = (strong.length > 0 ? strong : ranked).slice(0, MAX_PLACES);
+  // Best place of each cuisine in turn, so the shortlist covers every favourite cuisine.
+  const top = diversify(strong.length > 0 ? strong : ranked, MAX_PLACES);
   for (const p of top) screen(p.cuisine);
 
   const places: PlaceResult[] = top.map((place) => {
@@ -150,7 +162,7 @@ export async function runAgent(person: DemoPerson): Promise<PlanResult> {
           }),
         }),
         system:
-          "You write short, warm, plain-language wording for a family member or carer choosing a meal out for an older adult. Write about the person in the third person (they, their), not 'you'. Use only the facts given. One sentence per place, saying why the cuisine or place suits their taste. Do not name any dish, because the app lists and checks dishes itself. Do not mention medicines or health conditions. Never say anything is safe and never give medical advice. Do not use hype words.",
+          "You write short, warm, plain-language wording for a family member or carer choosing a meal out for an older adult. Write about the person in the third person (they, their), not 'you'. Use only the facts given. One sentence per place, saying why the cuisine or place suits their taste. Do not name any dish, because the app lists and checks dishes itself. Places can be real restaurants: use a place only by its given name and never claim what it serves, its menu or its quality. Do not mention medicines or health conditions. Never say anything is safe and never give medical advice. Do not use hype words. Write complete, grammatical sentences: never leave out a verb such as \"is\" (write \"and it is close by\", not \"and it close by\").",
         prompt: `Person: ${person.profile.name}. Write one intro sentence and one 'why this suits them' per place.\nFacts: ${JSON.stringify(facts)}`,
       });
       if (wordingOk(output.intro)) intro = output.intro;
@@ -180,7 +192,7 @@ export async function runAgent(person: DemoPerson): Promise<PlanResult> {
     intro,
     wording,
     wordingNote,
-    tasteSource: { name: provider.name, simulated: provider.simulated },
+    tasteSource: tasteSourceFor(top.map((p) => p.source)),
     activeRules: active.rules.length,
     inactiveRules: active.inactive.length,
     places,

@@ -3,7 +3,7 @@
 import { useProfile, toggle } from "@/components/profile-context";
 import { StepNav } from "@/components/step-nav";
 import { TasteMap } from "@/components/taste-map";
-import { CUISINE_OPTIONS, DISH_OPTIONS, EXAMPLES } from "@/lib/profile";
+import { CITY_OPTIONS, CUISINE_OPTIONS, DEFAULT_CITY, DISH_OPTIONS, EXAMPLES } from "@/lib/profile";
 
 export default function TastesPage() {
   const { profile, update, replace, reset, ready } = useProfile();
@@ -38,6 +38,17 @@ export default function TastesPage() {
           onChange={(e) => update({ name: e.target.value.replace(/[^\p{L} '-]/gu, "").replace(/^[^\p{L}]+/u, "").slice(0, 30) })}
         />
         <p className="small muted">Please do not use a real person’s name or any real health details.</p>
+      </section>
+
+      <section className="card" aria-label="City">
+        <h2><span aria-hidden="true">📍</span> Where?</h2>
+        <label htmlFor="city">Which city should we look for restaurants in?</label>
+        <select id="city" className="input" value={profile.city ?? DEFAULT_CITY} onChange={(e) => update({ city: e.target.value })}>
+          {CITY_OPTIONS.map((c) => (
+            <option key={c.id} value={c.id}>{c.label}</option>
+          ))}
+        </select>
+        <p className="small muted">Restaurants are searched within 5 km of the city centre.</p>
       </section>
 
       <section className="card" aria-label="Favourite cuisines">

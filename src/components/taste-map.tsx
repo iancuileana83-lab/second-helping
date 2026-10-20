@@ -10,7 +10,7 @@ export function TasteMap() {
   const { profile, ready } = useProfile();
   const [data, setData] = useState<TasteAffinity | null>(null);
   const [failed, setFailed] = useState(false);
-  const key = `${profile.cuisines.join(",")}|${profile.dishes.join(",")}`;
+  const key = `${profile.cuisines.join(",")}|${profile.dishes.join(",")}|${profile.city ?? ""}`;
 
   useEffect(() => {
     if (!ready) return;
@@ -43,6 +43,12 @@ export function TasteMap() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key, ready]);
 
+  const scores = data?.cuisines.map((c) => c.score) ?? [];
+  const lo = Math.min(...scores);
+  const hi = Math.max(...scores);
+  // Qloo affinities are all close together, so sizes show strength relative to the other favourites.
+  const relative = (s: number) => (hi > lo ? (s - lo) / (hi - lo) : 0.7);
+
   if (!ready || profile.cuisines.length === 0) {
     return (
       <section className="card" aria-label="Taste map">
@@ -62,7 +68,7 @@ export function TasteMap() {
           <ul className="bubbles" aria-label="Favourite cuisines by affinity">
             {data.cuisines.map((c, i) => {
               const opt = CUISINE_OPTIONS.find((o) => o.id === c.cuisine);
-              const size = Math.round(84 + c.score * 96);
+              const size = data.tasteSource.simulated ? Math.round(84 + c.score * 96) : Math.round(96 + relative(c.score) * 70);
               const style = { "--size": `${size}px`, "--d": `${i * 120}ms`, "--f": `${5 + (i % 3)}s` } as CSSProperties;
               return (
                 <li key={c.cuisine} className="bubble" style={style}>
@@ -75,8 +81,10 @@ export function TasteMap() {
           </ul>
           <p className={data.tasteSource.simulated ? "banner inline" : "small muted"}>
             {data.tasteSource.simulated
-              ? "SIMULATED affinity, NOT QLOO. With the real Qloo API these sizes will show true taste affinity."
-              : "Affinity from Qloo."}
+              ? data.tasteSource.fallback
+                ? "Qloo could not be reached just now, so this map is SIMULATED, NOT QLOO."
+                : "SIMULATED affinity, NOT QLOO. With the real Qloo API these sizes will show true taste affinity."
+              : "Affinity from Qloo. Bubble sizes show how strongly each favourite matches, relative to the other favourites."}
           </p>
         </>
       )}

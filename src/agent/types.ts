@@ -1,5 +1,5 @@
 import type { Verdict } from "@/safety/types";
-import type { Place } from "@/taste/provider";
+import type { Place, TasteSourceInfo } from "@/taste/provider";
 
 export interface PlaceResult {
   place: Place;
@@ -16,7 +16,7 @@ export interface PlanResult {
   /** "gemini" if the AI wrote the wording, "template" if plain fallback wording was used. */
   wording: "gemini" | "template";
   wordingNote?: string;
-  tasteSource: { name: string; simulated: boolean };
+  tasteSource: TasteSourceInfo;
   activeRules: number;
   inactiveRules: number;
   places: PlaceResult[];
