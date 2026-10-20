@@ -123,7 +123,7 @@ export default function AskPage() {
 
   return (
     <>
-      <h1><span aria-hidden="true">💬</span> Ask SafePlate</h1>
+      <h1><span aria-hidden="true">💬</span> Ask Second Helping</h1>
       <p className="lead">
         Ask in plain English. An AI agent picks tools to check taste and the safety rules, and shows every step.
         It only suggests meals and checks foods. It never gives medicine doses.

@@ -1,12 +1,14 @@
-# SafePlate
+# Second Helping
+
+**Second Helping: more of the food they love, checked against their medicines.**
 
 Meal and restaurant ideas for older adults, matched to their taste and checked by a transparent, reviewed food-medicine and texture safety layer.
 
-> **Not medical advice. The people in this demo are fictional.** SafePlate is a hackathon demo. It does not replace a pharmacist, doctor or speech and language therapist. Restaurants come from Qloo and are real businesses; SafePlate is not affiliated with them. Dishes are typical for the cuisine, not their menu, so always check with the restaurant. Ask your pharmacist or doctor about real medicines.
+> **Not medical advice. The people in this demo are fictional.** Second Helping is a hackathon demo. It does not replace a pharmacist, doctor or speech and language therapist. Restaurants come from Qloo and are real businesses; Second Helping is not affiliated with them. Dishes are typical for the cuisine, not their menu, so always check with the restaurant. Ask your pharmacist or doctor about real medicines.
 
 Built for the Qloo Agent Hackathon.
 
-**Status:** Qloo is connected: restaurants are real places near the chosen city (New York by default), ranked by Qloo's affinity to the person's favourite cuisines. If Qloo cannot be reached, the app says so and shows clearly labelled made-up places (the yellow **"SIMULATED TASTE DATA, NOT QLOO"** banner shows whenever no Qloo key is set). **Live demo: https://safeplate-nu.vercel.app** (hosted on the Vercel free Hobby plan; no login needed).
+**Status:** Qloo is connected: restaurants are real places near the chosen city (New York by default), ranked by Qloo's affinity to the person's favourite cuisines. If Qloo cannot be reached, the app says so and shows clearly labelled made-up places (the yellow **"SIMULATED TASTE DATA, NOT QLOO"** banner shows whenever no Qloo key is set). **Live demo: https://secondhelping.vercel.app** (hosted on the Vercel free Hobby plan; no login needed).
 
 ## What it does
 
@@ -16,7 +18,7 @@ Build a fictional profile (favourite cuisines and dishes, medicine groups, eatin
 - **Cook at home:** dish ideas by cuisine, best taste match first.
 - **Weekly plan:** a lunch and a dinner for each day, with no repeats and nothing the rules exclude.
 
-- **Ask SafePlate:** ask in plain English ("Margaret wants fish tonight, which restaurant?"). A Gemini agent chooses tools (taste, menu search, the safety rules, the weekly plan) and every step is shown under the answer. It can only choose and explain: it cannot override, soften or invent a safety result, it refuses anything outside meals and food safety, and it never gives dosing advice.
+- **Ask Second Helping:** ask in plain English ("Margaret wants fish tonight, which restaurant?"). A Gemini agent chooses tools (taste, menu search, the safety rules, the weekly plan) and every step is shown under the answer. It can only choose and explain: it cannot override, soften or invent a safety result, it refuses anything outside meals and food safety, and it never gives dosing advice.
 
 Every dish is checked against written rules and gets one of four results, always with the reason:
 
@@ -39,7 +41,7 @@ Press **Why? ↻** on a dish card to flip it and see the rule behind its badge. 
 
 ## Qloo
 
-Qloo provides the taste ranking: which restaurants fit this person's real taste. SafePlate then checks every typical dish through the safety layer. Qloo never decides what is safe.
+Qloo provides the taste ranking: which restaurants fit this person's real taste. Second Helping then checks every typical dish through the safety layer. Qloo never decides what is safe.
 
 - **What is called:** the Qloo Insights API on the hackathon server (`GET {QLOO_BASE_URL}/v2/insights`, key in the `X-Api-Key` header, parameters in the query string). Restaurants are filtered with the tag `urn:tag:genre:place:restaurant` near a `POINT(lon lat)` within 5 km, and the person's favourite cuisines (tags such as `urn:tag:genre:place:restaurant:italian`) are the `signal.interests.tags`. The response's `query.affinity` is the taste score.
 - **Cities:** New York (default), London, Chicago, Los Angeles, Toronto and Bucharest.

@@ -34,7 +34,7 @@ export function PlaceInfo({ place }: { place: Place }) {
         </p>
       )}
       <p className="small muted">
-        Typical {cuisine} dishes, not this restaurant’s menu. SafePlate is not affiliated with this restaurant. Always check with
+        Typical {cuisine} dishes, not this restaurant’s menu. Second Helping is not affiliated with this restaurant. Always check with
         the restaurant.
       </p>
     </>

@@ -1,18 +1,19 @@
 import Link from "next/link";
 import { SIMULATED_BANNER, qlooConfigured } from "@/taste";
 
-export const metadata = { title: "About · SafePlate" };
+export const metadata = { title: "About · Second Helping" };
 
 export default function AboutPage() {
   const simulated = !qlooConfigured();
   return (
     <>
-      <h1><span aria-hidden="true">ℹ️</span> About SafePlate</h1>
+      <h1><span aria-hidden="true">ℹ️</span> About Second Helping</h1>
+      <p className="lead">More of the food they love, checked against their medicines.</p>
 
       <section className="card warm">
         <h2><span aria-hidden="true">🧭</span> How Qloo is used</h2>
         <p>
-          Qloo is a taste-intelligence service. SafePlate uses it to answer: <em>which cuisines and places fit this
+          Qloo is a taste-intelligence service. Second Helping uses it to answer: <em>which cuisines and places fit this
           person’s real taste?</em> The favourite cuisines and dishes you choose become the taste signals, and Qloo ranks
           places by how well they match.
         </p>
@@ -23,7 +24,7 @@ export default function AboutPage() {
           <p>
             <strong>Qloo is connected.</strong> The restaurants are real businesses near the city you choose, ranked by Qloo’s affinity to the
             person’s favourite cuisines. If Qloo cannot be reached, the app says so and shows clearly labelled made-up places instead.
-            SafePlate is not affiliated with these restaurants. Dishes are typical for the cuisine, not their menu, so always check with the restaurant.
+            Second Helping is not affiliated with these restaurants. Dishes are typical for the cuisine, not their menu, so always check with the restaurant.
           </p>
         )}
       </section>
@@ -52,7 +53,7 @@ export default function AboutPage() {
       <section className="card">
         <h2><span aria-hidden="true">⚠️</span> Not medical advice</h2>
         <p>
-          SafePlate is a hackathon demo. It is not medical advice and does not replace a pharmacist, doctor or speech and
+          Second Helping is a hackathon demo. It is not medical advice and does not replace a pharmacist, doctor or speech and
           language therapist. Dishes are typical for a cuisine, not the exact menu of any place, so always check the menu.
           Ask your pharmacist or doctor.
         </p>

@@ -21,7 +21,7 @@ const STEPS = [
   },
   {
     icon: "🛡️",
-    title: "SafePlate checks every dish",
+    title: "Second Helping checks every dish",
     body: "A shield scans each dish against written rules reviewed by a pharmacy assistant. Green means no concerns, amber means caution, red means left out. Press any dish card to see the rule behind its badge.",
   },
 ];

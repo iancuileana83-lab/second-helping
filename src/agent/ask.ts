@@ -14,7 +14,7 @@ import { MODEL_ID } from "./model";
 import { REFUSAL_TEXT, cleanMessage, foodsMentioned, scopeCheck } from "./scope";
 
 /**
- * "Ask SafePlate". The model chooses which tools to call and explains in a few words.
+ * "Ask Second Helping". The model chooses which tools to call and explains in a few words.
  * It can never change a safety result:
  *  - verdicts come only from the rules engine (the checkSafety and weeklyPlan tools),
  *  - the app checks every dish and every food the carer named itself, whatever the model did,

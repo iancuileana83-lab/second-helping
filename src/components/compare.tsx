@@ -5,7 +5,7 @@ import { compareIllustrative } from "@/lib/compare";
 import { useProfile } from "./profile-context";
 import { StatusChip } from "./verdicts";
 
-/** "Generic AI vs SafePlate": same suggestions, with and without the safety layer. */
+/** "Generic AI vs Second Helping": same suggestions, with and without the safety layer. */
 export function CompareToggle() {
   const { profile } = useProfile();
   const [open, setOpen] = useState(false);
@@ -13,7 +13,7 @@ export function CompareToggle() {
   if (rows.length === 0) return null;
 
   return (
-    <section className="card compare-wrap" aria-label="Generic AI compared with SafePlate">
+    <section className="card compare-wrap" aria-label="Generic AI compared with Second Helping">
       <button type="button" className="btn" aria-expanded={open} aria-controls="compare-panel" onClick={() => setOpen((o) => !o)}>
         <span aria-hidden="true">⚖️</span> {open ? "Hide the comparison" : "Compare with a generic AI"}
       </button>
@@ -21,12 +21,12 @@ export function CompareToggle() {
         <div id="compare-panel" className="compare">
           <p className="notice">
             <strong>Illustrative example.</strong> The left side is an invented example of what a generic chatbot might
-            suggest. It is not a real chatbot response. The right side is SafePlate’s real checks of the same ideas for
+            suggest. It is not a real chatbot response. The right side is Second Helping’s real checks of the same ideas for
             this person.
           </p>
           <div className="cmp-head" aria-hidden="true">
             <p>Generic AI (illustrative)</p>
-            <p>SafePlate</p>
+            <p>Second Helping</p>
           </div>
           {rows.map((r, i) => (
             <div className="cmp-row" key={r.verdict.dish.name} style={{ animationDelay: `${i * 160}ms` }}>
@@ -35,7 +35,7 @@ export function CompareToggle() {
                 <p>“{r.chatbotSays}” <span aria-hidden="true">👍</span></p>
               </div>
               <div className="cmp-cell safeplate">
-                <p className="small muted cmp-label">SafePlate says</p>
+                <p className="small muted cmp-label">Second Helping says</p>
                 <p><StatusChip status={r.verdict.status} /> <strong>{r.verdict.dish.name}</strong></p>
                 {r.verdict.findings.map((f) => (
                   <p className="finding" key={f.ruleId}>

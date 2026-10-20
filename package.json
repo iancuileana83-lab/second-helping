@@ -1,8 +1,8 @@
 {
-  "name": "safeplate",
+  "name": "second-helping",
   "version": "0.1.0",
   "private": true,
-  "description": "SafePlate: taste-grounded meal and restaurant suggestions for older adults, filtered by a transparent food-medicine and texture safety layer. Fictional data only. Not medical advice.",
+  "description": "Second Helping: more of the food they love, checked against their medicines. Qloo Agent Hackathon. Fictional people, not medical advice.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

@@ -4,7 +4,7 @@ import { toDemoPerson, type UserProfile } from "@/lib/profile";
 
 /**
  * ILLUSTRATIVE ONLY. These are invented examples of the kind of suggestion a generic chatbot
- * might make. They are not real chatbot output. SafePlate's right-hand side is the real rule engine.
+ * might make. They are not real chatbot output. Second Helping's right-hand side is the real rule engine.
  */
 export interface IllustrativeSuggestion {
   dish: Dish;

@@ -2,7 +2,7 @@ import { FoodSearch, type FoodEntry } from "@/components/food-search";
 import { ACTION_LABEL, ruleNumber } from "@/lib/rule-view";
 import { getActiveRules } from "@/safety";
 
-export const metadata = { title: "Safety by food · SafePlate" };
+export const metadata = { title: "Safety by food · Second Helping" };
 
 export default function ByFoodPage() {
   const { rules } = getActiveRules();

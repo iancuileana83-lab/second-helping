@@ -298,7 +298,7 @@ ul.dishes { grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1f
 .dish.hint-wiggle .flip { animation: wiggle 0.9s ease-in-out calc(var(--i) * 0.42s + 1.5s) 1 both; }
 .why-btn { gap: 6px; }
 
-/* ===== Ask SafePlate ===== */
+/* ===== Ask Second Helping ===== */
 .chat { margin: 16px 0; }
 .turn { margin: 18px 0; }
 .q-bubble {

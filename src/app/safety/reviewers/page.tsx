@@ -1,7 +1,7 @@
 import { RuleCard } from "@/components/rule-card";
 import { getActiveRules } from "@/safety";
 
-export const metadata = { title: "Who reviewed the rules · SafePlate" };
+export const metadata = { title: "Who reviewed the rules · Second Helping" };
 
 export default function ReviewersPage() {
   const active = getActiveRules();

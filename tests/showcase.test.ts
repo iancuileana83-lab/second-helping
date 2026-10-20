@@ -6,7 +6,7 @@ import { EXAMPLES, toDemoPerson, type UserProfile } from "../src/lib/profile";
 const margaret = EXAMPLES.find((e) => e.id === "margaret")!.profile;
 const rosa: UserProfile = { name: "Rosa", cuisines: ["italian"], dishes: [], medicineGroups: [], conditions: [], needs: [] };
 
-describe("generic AI vs SafePlate comparison", () => {
+describe("generic AI vs Second Helping comparison", () => {
   it("for Margaret, grapefruit juice is excluded by the statin rule, with the real rule number", () => {
     const rows = compareIllustrative(margaret, 10);
     const g = rows.find((r) => r.verdict.dish.name.startsWith("Grapefruit"));

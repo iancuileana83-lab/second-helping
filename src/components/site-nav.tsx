@@ -32,7 +32,7 @@ export const NAV: Item[] = [
       { href: "/meals/weekly-plan", label: "Weekly plan" },
     ],
   },
-  { href: "/ask", label: "Ask SafePlate", icon: "💬" },
+  { href: "/ask", label: "Ask Second Helping", icon: "💬" },
   {
     href: "/safety",
     label: "Safety",
@@ -58,8 +58,8 @@ export function SiteNav() {
     <header className="site-header">
       <a className="skip" href="#main">Skip to content</a>
       <div className="bar">
-        <Link href="/" className="brand" aria-label="SafePlate home">
-          <span aria-hidden="true">🍲</span> SafePlate
+        <Link href="/" className="brand" aria-label="Second Helping home">
+          <span aria-hidden="true">🍲</span> Second Helping
         </Link>
         <nav aria-label="Main">
           <ul className="topnav">

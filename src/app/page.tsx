@@ -7,10 +7,10 @@ export default function Home() {
   return (
     <>
       <section className="hero">
-        <p className="eyebrow">For families and carers</p>
-        <h1>Meals an older person will enjoy, checked for safety</h1>
+        <p className="eyebrow">Second Helping · for families and carers</p>
+        <h1>More of the food they love, checked against their medicines</h1>
         <p className="lead">
-          Tell us what they like to eat and which medicines and eating needs they have. SafePlate suggests restaurants,
+          Tell us what they like to eat and which medicines and eating needs they have. Second Helping suggests restaurants,
           home cooking and a weekly plan, and shows exactly why a dish is fine, needs care, or is left out.
         </p>
         <p>

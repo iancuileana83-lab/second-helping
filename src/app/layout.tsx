@@ -6,9 +6,9 @@ import { SIMULATED_BANNER, qlooConfigured } from "@/taste";
 import "./globals.css";
 
 export const metadata = {
-  title: "SafePlate",
+  title: "Second Helping",
   description:
-    "Taste-grounded meal ideas for older adults, checked by a transparent safety layer. Fictional data. Not medical advice.",
+    "Second Helping: more of the food they love, checked against their medicines. Taste-based meal and restaurant ideas for older adults. The people are fictional. Not medical advice.",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -36,7 +36,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <p>
               <strong>Not medical advice. The people in this demo are fictional.</strong>{" "}
               {connected
-                ? "Restaurants come from Qloo and are real businesses. SafePlate is not affiliated with these restaurants; dishes are typical for the cuisine, not their menu, so always check with the restaurant. "
+                ? "Restaurants come from Qloo and are real businesses. Second Helping is not affiliated with these restaurants; dishes are typical for the cuisine, not their menu, so always check with the restaurant. "
                 : "Places are made up while Qloo is not connected, and dishes are typical for a cuisine, so always check the menu. "}
               Ask your pharmacist or doctor about real medicines.
             </p>

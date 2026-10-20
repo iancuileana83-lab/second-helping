@@ -11,10 +11,10 @@ export default function MedicinesPage() {
     <>
       <h1><span aria-hidden="true">💊</span> Person: Medicines</h1>
       <p className="lead">
-        Tick the groups of medicines this person takes. These are the only groups SafePlate has reviewed rules for.
+        Tick the groups of medicines this person takes. These are the only groups Second Helping has reviewed rules for.
       </p>
       <p className="notice">
-        If a medicine is not in a group below, SafePlate has no rules for it. That does not mean it is free of food
+        If a medicine is not in a group below, Second Helping has no rules for it. That does not mean it is free of food
         interactions. Ask your pharmacist or doctor.
       </p>
 

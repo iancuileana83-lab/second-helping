@@ -52,7 +52,7 @@ export default function NeedsPage() {
         </div>
       </fieldset>
 
-      <p className="notice">Swallowing difficulty needs advice from a speech and language therapist. SafePlate only points out food textures that are often hard.</p>
+      <p className="notice">Swallowing difficulty needs advice from a speech and language therapist. Second Helping only points out food textures that are often hard.</p>
       <StepNav back={{ href: "/person/medicines", label: "Medicines" }} next={{ href: "/meals/restaurants", label: "See meal ideas" }} />
     </>
   );

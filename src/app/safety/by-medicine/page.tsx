@@ -3,7 +3,7 @@ import { ruleNumber } from "@/lib/rule-view";
 import { getActiveRules } from "@/safety";
 import type { Rule } from "@/safety/types";
 
-export const metadata = { title: "Safety by medicine · SafePlate" };
+export const metadata = { title: "Safety by medicine · Second Helping" };
 
 function RuleLine({ r }: { r: Rule }) {
   return (
